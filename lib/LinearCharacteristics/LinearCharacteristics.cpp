@@ -32,12 +32,14 @@ void LinearCharacteristics::init(float xmin, float xmax, float ymin, float ymax)
 
 float LinearCharacteristics::evaluate(float x)
 {
+    // calculate result as y(x) = gain * (x - offset)
     float ret_val = m_gain * (x - m_offset);
-    if (ret_val > m_ulim)
-        ret_val = m_ulim;
-    else if (ret_val < m_llim)
-        ret_val = m_llim;
 
+    // limit result to upper and lower limits
+    if (ret_val > m_ulim)
+        return m_ulim;
+    else if (ret_val < m_llim)
+        return m_llim;
     return ret_val;
 }
 
