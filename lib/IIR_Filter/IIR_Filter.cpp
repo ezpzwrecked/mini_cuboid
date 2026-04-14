@@ -10,10 +10,32 @@ IIR_Filter::~IIR_Filter() {}
 
 // First Order Lowpass Filter
 // Time continuous prototype: G(s) = 1 / (tau*s + 1)
-// Discretization method: Tustin
 void IIR_Filter::lowPass1Init(float tau, float Ts)
 {
+    m_b0 = Ts/tau;
+    m_a0 = -(tau-Ts)/tau;
+    m_b1 = 0.0f;
+    m_y_kmin1 = 0.0f;
+    m_u_kmin1 = 0.0f;
+}
 
+void IIR_Filter::lowPass1Init(float tau, float Ts, float gain)
+{
+    m_b0 = Ts/tau * gain;
+    m_a0 = -(tau-Ts)/tau;
+    m_b1 = 0.0f;
+    m_y_kmin1 = 0.0f;
+    m_u_kmin1 = 0.0f;
+}
+
+// Integrator IIR filter initialization
+void IIR_Filter::integratorInit(float Ts)
+{
+    m_b0 = Ts;
+    m_a0 = -1.0f;
+    m_b0 = 0.0f;
+    m_y_kmin1 = 0.0f;
+    m_u_kmin1 = 0.0f;
 }
 
 // First Order Differentiating Lowpass Filter

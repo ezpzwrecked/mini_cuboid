@@ -87,7 +87,7 @@ void uart_comm_thread_send::send_slow_data(void)
         case 115:
             buf[0] = ax_avg;
             buf[1] = ay_avg;
-            buf[2] = gz_avg;
+            buf[2] = m_io->get_phi_bd();//gz_avg;
             send(115, 1, 12, (char *)&buf[0]);
             send_state_slow = 210;
             break;

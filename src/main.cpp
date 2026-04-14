@@ -9,9 +9,11 @@
 // IMPORTANT:
 // - Do NOT set the BufferedSerial to non-blocking mode, as this will break proper communication!
 
+// Grau 1
+
 float Ts = 1.0f / 1.0e3f;
 GPA myGPA(1.0f, 245.0f, 30, 0.1f, 0.2f, Ts); // setup here does not affect the actual used parameters, they are set via
-                                             // the UART communication via MATLAB
+                                             // the UART communication via MATLAB4
 DataLogger myDataLogger(1);
 
 int main()

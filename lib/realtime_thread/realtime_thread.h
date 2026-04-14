@@ -31,4 +31,5 @@ private:
     ControlState m_state;
     void sendSignal();
     float saturate(float, float, float);
+    IIR_Filter m_integrator;
 };

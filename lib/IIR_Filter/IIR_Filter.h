@@ -9,6 +9,8 @@ public:
     float operator()(float u) { return evaluate(u); }
 
     void lowPass1Init(float, float);
+    void lowPass1Init(float, float, float);
+    void integratorInit(float Ts);
     void differentiatingLowPass1Init(float, float);
     float evaluate(float);
     void reset(float, float);

@@ -45,3 +45,31 @@ addpath app/
 % figure(1)
 % plot(t, [u, y]), grid on
 % xlabel('Time (sec)')
+
+%% Zustandsregler ohne Scheibe
+p = get_parameter;
+p.J1 = 3e-3;
+
+J = p.J1 + p.m*p.R^2;
+A = [0, 1; p.m*p.g*p.R/J, 0];
+B = [0; -1/J];
+
+P_des2 = [-11+11j, -11-11j];
+K2 = place(A,B,P_des2);
+fprintf('Matrix<float, 1, 2> K(%1.4ff, %1.4ff);\n', K2(1), K2(2));
+
+
+%% System 3. Ordnung x3 = Drehzahl Scheibe im globalen System
+A3 = [A, zeros(2,1); 0, 0, 0];
+B3 = [B; 1/p.J2];
+C3 = [1, 0, 0; 0, 1, 0; 0, -1, 1];
+
+s1 = ss(A3,B3,C3,0);
+s2 = ss2ss(s1,C3);
+
+%% Erweitere System um Integratorzustand
+A4 = [s2.A, zeros(3,1); 0, 0, -1, 0];
+B4 = [s2.B; 0];
+P_des4 = [-11+5j, -11-5j, -20, -0.2];
+K4 = place(A4,B4,P_des4);
+fprintf('Matrix<float, 1, 4> K4(%1.4ff, %1.4ff, %1.4ff, %1.4ff);\n', K4(1), K4(2), K4(3), K4(4));

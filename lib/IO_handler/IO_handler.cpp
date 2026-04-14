@@ -27,15 +27,20 @@ IO_handler::IO_handler(float Ts)
     m_imu.configuration();
 
     // initialize linear characteristics
-    m_lc_gz2gz.init(-32767.0f, 32768.0f, -1000.0f * M_PIf / 180.0f, 1000.0f * M_PIf / 180.0f);
-    m_lc_ax2ax.init(1.0f, 0.0f);
-    m_lc_ay2ay.init(1.0f, 0.0f);
-    m_lc_i2u.init(1.0f, 0.0f);
+    m_lc_gz2gz.init(-32768.0f, 32767.0f, -1000.0f * M_PIf / 180.0f, 1000.0f * M_PIf / 180.0f);
+    m_lc_ax2ax.init(-16170.0f, 16729.0f, -9.81f, 9.81f);
+    m_lc_ay2ay.init(-17034.0f, 15860.0f, -9.81f, 9.81f);
+    m_lc_i2u.init(-15.0f, 15.0f, 0.0f, 1.0f);
 
     // differentiating low pass filter
     m_fil_diff.differentiatingLowPass1Init(1.0f / (2.0f * M_PIf * 40.0f), Ts);
 
     // low pass filters for complementary filter
+    float m_tau = 1.0f;
+    m_fil_ax.lowPass1Init(m_tau, Ts);
+    m_fil_ay.lowPass1Init(m_tau, Ts);
+    m_fil_gz.lowPass1Init(m_tau, Ts, 1.0f);
+    //m_fil_phi_bd.integratorInit(Ts);
 }
 
 IO_handler::~IO_handler() {}
@@ -52,6 +57,7 @@ void IO_handler::update(void)
     m_gz = m_lc_gz2gz(m_imu.readGyro_raw(2));
 
     // calculate complementary filter for wheel angle
+    m_phi_bd = atan2(m_fil_ax(m_ax), m_fil_ay(m_ay)) + m_fil_gz(m_gz) - M_PI / 4.0f;
 }
 
 float IO_handler::get_phi_fw(void) { return m_phi_fw; }

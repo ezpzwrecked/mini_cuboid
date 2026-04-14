@@ -43,7 +43,9 @@ private:
     float m_ax, m_ay, m_gz; // accelerations x-y and gyroscope z in m/sec^2 and rad/sec
     void button_pressed(void);
     bool m_button_pressed;
-    float m_tau = 0.0f;
+    //float m_tau = 0.0f;
     IIR_Filter m_fil_diff;
     IIR_Filter m_fil_ax, m_fil_ay, m_fil_gz;
+    //IIR_Filter m_fil_phi_bd;
+    IIR_Filter m_integrator;
 };
